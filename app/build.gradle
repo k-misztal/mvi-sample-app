@@ -34,6 +34,11 @@ android {
                 keyPassword "pass"
             }
         }
+
+        // Foursquare API credentials
+        buildConfigField 'String', 'CLIENT_ID', '"5FRGTLXTAK22AGQ02RX5FVJHDKCL1RUATSAQNCHQRIYNPQGV"'
+        buildConfigField 'String', 'SECRET', '"VHUJO13BJ3D2WXK4E2OOZ1LIBQRCAEXFHDDIB3UBGINNDRHZ"'
+        buildConfigField 'String', 'VERSION', '"20170611"'
     }
 
     buildTypes {
@@ -42,12 +47,6 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.productionConfig
-        }
-    }
-
-    productFlavors {
-        prod {
-            buildConfigField 'String', 'ENDPOINT', '"http://api.example.com"'
         }
     }
 
