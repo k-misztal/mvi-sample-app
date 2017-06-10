@@ -16,3 +16,5 @@ What's that, functionalities
 ### Test coverage
 
 ## Architecture wireframe
+
+architecture, android perrmissions
