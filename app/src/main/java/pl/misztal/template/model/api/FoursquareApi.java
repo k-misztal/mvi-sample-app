@@ -1,5 +1,5 @@
 package pl.misztal.template.model.api;
 
-public interface RestService {
+public interface FoursquareApi {
     //TODO remember about reactive model - return observables !
 }

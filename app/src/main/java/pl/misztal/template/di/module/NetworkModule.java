@@ -8,7 +8,7 @@ import dagger.Provides;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import pl.misztal.template.BuildConfig;
-import pl.misztal.template.model.api.RestService;
+import pl.misztal.template.model.api.FoursquareApi;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NetworkModule {
 
     @Provides
-    RestService provideRestService(OkHttpClient client, Gson gson) {
+    FoursquareApi provideRestService(OkHttpClient client, Gson gson) {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.ENDPOINT)
                 .client(client)
@@ -25,7 +25,7 @@ public class NetworkModule {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
-        return retrofit.create(RestService.class);
+        return retrofit.create(FoursquareApi.class);
     }
 
     @Provides
