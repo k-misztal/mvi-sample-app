@@ -17,6 +17,8 @@ public class DatabaseFacade {
         realm = Realm.getInstance(config);
     }
 
+    // TODO: 11.06.2017 remove database !
+
 
     // TODO remember about reactive model - return observables, or better Single
     // For void operations return Completable !
