@@ -1,6 +1,6 @@
 # Bonfire sample app
 
-This application is made as a sample app for [bonfire](www.bonfireit.com). 
+This application is made as a sample app for [bonfire](https://www.bonfireit.com). 
 
 What's that, functionalities 
 
