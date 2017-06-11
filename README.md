@@ -18,3 +18,5 @@ What's that, functionalities
 ## Architecture wireframe
 
 architecture, android perrmissions
+
+client API credentials -> `app/build.gradle`

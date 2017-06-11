@@ -11,13 +11,16 @@ import java.util.List;
  */
 
 public class Photos {
-    private final List<ImageGroup> groups;
+    public static final String GROUP_VENUE = "venue";
+    public static final String GROUP_CHECKIN = "checkin";
 
-    public Photos(List<ImageGroup> groups) {
+    private final List<Group<Image>> groups;
+
+    public Photos(List<Group<Image>> groups) {
         this.groups = groups;
     }
 
-    public List<ImageGroup> getGroups() {
+    public List<Group<Image>> getGroups() {
         return groups;
     }
 
@@ -26,8 +29,8 @@ public class Photos {
      */
     @Nullable
     public Image getDefault() {
-        ImageGroup venue = getVenueGroup();
-        ImageGroup checkin = getCheckinGroup();
+        Group<Image> venue = getVenueGroup();
+        Group<Image> checkin = getCheckinGroup();
 
         if (venue != null && venue.getFirst() != null) {
             return venue.getFirst();
@@ -41,10 +44,10 @@ public class Photos {
     }
 
     @Nullable
-    private ImageGroup getCheckinGroup() {
+    private Group<Image> getCheckinGroup() {
         if (groups != null) {
-            for (ImageGroup group : groups) {
-                if (group.getType().equals(ImageGroup.GROUP_CHECKIN))
+            for (Group<Image> group : groups) {
+                if (group.getType().equals(GROUP_CHECKIN))
                     return group;
             }
         }
@@ -53,10 +56,10 @@ public class Photos {
     }
 
     @Nullable
-    private ImageGroup getVenueGroup() {
+    private Group<Image> getVenueGroup() {
         if (groups != null) {
-            for (ImageGroup group : groups) {
-                if (group.getType().equals(ImageGroup.GROUP_VENUE))
+            for (Group<Image> group : groups) {
+                if (group.getType().equals(GROUP_VENUE))
                     return group;
             }
         }

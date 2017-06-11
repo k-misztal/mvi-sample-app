@@ -10,15 +10,14 @@ import java.util.List;
  * @author Krzysztof Misztal
  */
 
-public final class ImageGroup {
-    public static final String GROUP_VENUE = "venue";
-    public static final String GROUP_CHECKIN = "checkin";
-
+public class Group<T> {
     private final String type;
-    private final List<Image> items;
+    private final String name;
+    private final List<T> items;
 
-    public ImageGroup(String type, List<Image> items) {
+    public Group(String type, String name, List<T> items) {
         this.type = type;
+        this.name = name;
         this.items = items;
     }
 
@@ -26,7 +25,11 @@ public final class ImageGroup {
         return type;
     }
 
-    public List<Image> getItems() {
+    public String getName() {
+        return name;
+    }
+
+    public List<T> getItems() {
         return items;
     }
 
@@ -34,8 +37,11 @@ public final class ImageGroup {
         return items != null && !items.isEmpty();
     }
 
+    /**
+     * @return first item of group
+     */
     @Nullable
-    public Image getFirst() {
+    public T getFirst() {
         if (items != null && !items.isEmpty()) {
             return items.get(0);
         }

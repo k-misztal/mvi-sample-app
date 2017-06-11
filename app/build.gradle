@@ -36,6 +36,7 @@ android {
         }
 
         // Foursquare API credentials
+        buildConfigField 'String', 'BASE_URL', '"https://api.foursquare.com/v2/"'
         buildConfigField 'String', 'CLIENT_ID', '"5FRGTLXTAK22AGQ02RX5FVJHDKCL1RUATSAQNCHQRIYNPQGV"'
         buildConfigField 'String', 'SECRET', '"VHUJO13BJ3D2WXK4E2OOZ1LIBQRCAEXFHDDIB3UBGINNDRHZ"'
         buildConfigField 'String', 'VERSION', '"20170611"'
