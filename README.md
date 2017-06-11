@@ -17,6 +17,7 @@ What's that, functionalities
 
 ## Architecture wireframe
 
-architecture, android perrmissions
+[MVI blog series](http://hannesdorfmann.com/android/mosby3-mvi-1)
+architecture with state reducer, android perrmissions
 
 client API credentials -> `app/build.gradle`

@@ -1,12 +1,14 @@
 package pl.misztal.template.model.api.model;
 
+import pl.misztal.template.model.FeedItem;
+
 /**
  * Created by kmisztal on 11.06.2017.
  *
  * @author Krzysztof Misztal
  */
 
-public final class Venue {
+public final class Venue implements FeedItem {
     private final String name;
     private final float rating;
     private final Stats stats;
