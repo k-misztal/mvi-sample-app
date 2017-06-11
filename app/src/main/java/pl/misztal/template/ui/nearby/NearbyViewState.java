@@ -4,8 +4,9 @@ import java.util.Collections;
 import java.util.List;
 
 import pl.misztal.template.model.FeedItem;
+import pl.misztal.template.ui.base.ViewState;
 
-public final class NearbyViewState {
+public final class NearbyViewState implements ViewState {
     private final boolean waitingForLocation; //can be true initially when location is unknown or not accurate enough
 
     private final boolean loadingFirstPage; //loading first page
@@ -13,19 +14,13 @@ public final class NearbyViewState {
 
     private final List<FeedItem> data; //data to be displayed
 
-    private final boolean loadingNextPage;
-    private final Throwable nextPageError;
-
     private NearbyViewState(boolean waitingForLocation, boolean loadingFirstPage,
-                            Throwable firstPageError, List<FeedItem> data, boolean loadingNextPage,
-                            Throwable nextPageError) {
+                            Throwable firstPageError, List<FeedItem> data) {
 
         this.waitingForLocation = waitingForLocation;
         this.loadingFirstPage = loadingFirstPage;
         this.firstPageError = firstPageError;
         this.data = data;
-        this.loadingNextPage = loadingNextPage;
-        this.nextPageError = nextPageError;
     }
 
     public boolean isWaitingForLocation() {
@@ -44,14 +39,6 @@ public final class NearbyViewState {
         return data;
     }
 
-    public boolean isLoadingNextPage() {
-        return loadingNextPage;
-    }
-
-    public Throwable getNextPageError() {
-        return nextPageError;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -61,11 +48,9 @@ public final class NearbyViewState {
 
         if (waitingForLocation != that.waitingForLocation) return false;
         if (loadingFirstPage != that.loadingFirstPage) return false;
-        if (loadingNextPage != that.loadingNextPage) return false;
         if (firstPageError != null ? !firstPageError.equals(that.firstPageError) : that.firstPageError != null)
             return false;
-        if (data != null ? !data.equals(that.data) : that.data != null) return false;
-        return nextPageError != null ? nextPageError.equals(that.nextPageError) : that.nextPageError == null;
+        return data != null ? data.equals(that.data) : that.data == null;
 
     }
 
@@ -75,19 +60,14 @@ public final class NearbyViewState {
         result = 31 * result + (loadingFirstPage ? 1 : 0);
         result = 31 * result + (firstPageError != null ? firstPageError.hashCode() : 0);
         result = 31 * result + (data != null ? data.hashCode() : 0);
-        result = 31 * result + (loadingNextPage ? 1 : 0);
-        result = 31 * result + (nextPageError != null ? nextPageError.hashCode() : 0);
         return result;
     }
-
 
     public static final class Builder {
         private boolean waitingForLocation;
         private boolean loadingFirstPage;
         private Throwable firstPageError;
         private List<FeedItem> data;
-        private boolean loadingNextPage;
-        private Throwable nextPageError;
 
         public Builder() {
             data = Collections.emptyList();
@@ -98,8 +78,6 @@ public final class NearbyViewState {
             this.loadingFirstPage = copy.loadingFirstPage;
             this.firstPageError = copy.firstPageError;
             this.data = copy.data;
-            this.loadingNextPage = copy.loadingNextPage;
-            this.nextPageError = copy.nextPageError;
         }
 
         public Builder withWaitingForLocation(boolean val) {
@@ -126,19 +104,8 @@ public final class NearbyViewState {
             return this;
         }
 
-        public Builder withLoadingNextPage(boolean val) {
-            loadingNextPage = val;
-            return this;
-        }
-
-        public Builder withNextPageError(Throwable val) {
-            nextPageError = val;
-            return this;
-        }
-
         public NearbyViewState build() {
-            return new NearbyViewState(waitingForLocation, loadingFirstPage, firstPageError,
-                    data, loadingNextPage, nextPageError);
+            return new NearbyViewState(waitingForLocation, loadingFirstPage, firstPageError, data);
         }
     }
 }

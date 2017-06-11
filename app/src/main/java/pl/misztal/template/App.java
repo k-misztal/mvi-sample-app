@@ -6,6 +6,7 @@ import com.squareup.leakcanary.LeakCanary;
 
 import pl.misztal.template.di.component.AppComponent;
 import pl.misztal.template.di.component.DaggerAppComponent;
+import pl.misztal.template.di.module.AndroidModule;
 import timber.log.Timber;
 
 public class App extends Application {
@@ -31,7 +32,9 @@ public class App extends Application {
     }
 
     private void initializeToothpick() {
-        component = DaggerAppComponent.create();
+        component = DaggerAppComponent.builder()
+                .androidModule(new AndroidModule(this))
+                .build();
     }
 
     private void initializeTimber() {

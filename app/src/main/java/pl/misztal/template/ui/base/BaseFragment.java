@@ -1,6 +1,6 @@
 package pl.misztal.template.ui.base;
 
-import android.app.Activity;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 import com.hannesdorfmann.mosby3.mvi.MviFragment;
@@ -15,8 +15,8 @@ public abstract class BaseFragment<V extends BaseView, P extends BasePresenter<V
     protected Unbinder unbinder;
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         initInjector();
         inject(component);
     }
@@ -32,6 +32,10 @@ public abstract class BaseFragment<V extends BaseView, P extends BasePresenter<V
 
     protected void inject(@NonNull FragmentComponent component) {
         //override to inject
+    }
+
+    protected FragmentComponent getComponent() {
+        return component;
     }
 
     private void initInjector() {

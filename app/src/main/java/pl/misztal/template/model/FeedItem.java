@@ -7,5 +7,5 @@ package pl.misztal.template.model;
  */
 
 public interface FeedItem {
-    public final class
+
 }

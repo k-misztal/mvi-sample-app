@@ -1,7 +1,11 @@
 package pl.misztal.template.di.component;
 
+import android.content.Context;
+import android.view.LayoutInflater;
+
 import dagger.Component;
 import pl.misztal.template.di.scope.ActivitySingleton;
+import pl.misztal.template.model.DataManager;
 
 /**
  * Created by kmisztal on 10.06.2017.
@@ -11,4 +15,9 @@ import pl.misztal.template.di.scope.ActivitySingleton;
 @ActivitySingleton
 @Component(dependencies = AppComponent.class)
 public interface ActivityComponent {
+    DataManager dataManager();
+
+    Context context();
+
+    LayoutInflater layoutInflater();
 }

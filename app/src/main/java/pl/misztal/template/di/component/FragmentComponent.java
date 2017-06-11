@@ -1,7 +1,13 @@
 package pl.misztal.template.di.component;
 
+import android.content.Context;
+import android.view.LayoutInflater;
+
 import dagger.Component;
 import pl.misztal.template.di.scope.FragmentSingleton;
+import pl.misztal.template.model.DataManager;
+import pl.misztal.template.ui.nearby.NearbyFragment;
+import pl.misztal.template.ui.nearby.NearbyPresenter;
 
 /**
  * Created by kmisztal on 10.06.2017.
@@ -11,4 +17,14 @@ import pl.misztal.template.di.scope.FragmentSingleton;
 @FragmentSingleton
 @Component(dependencies = ActivityComponent.class)
 public interface FragmentComponent {
+
+    DataManager dataManager();
+
+    Context context();
+
+    LayoutInflater layoutInflater();
+
+    NearbyPresenter nearbyPresenter();
+
+    void inject(NearbyFragment nearbyFragment);
 }
