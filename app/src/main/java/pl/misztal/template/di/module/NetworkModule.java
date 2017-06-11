@@ -19,7 +19,7 @@ public class NetworkModule {
     @Provides
     FoursquareApi provideRestService(OkHttpClient client, Gson gson) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BuildConfig.ENDPOINT)
+                .baseUrl(BuildConfig.BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
