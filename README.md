@@ -5,7 +5,9 @@ This application is made as a sample app for [bonfire](https://www.bonfireit.com
 What's that, functionalities 
 
 - minimum API 21
+- PlayServices - assumed that are installed, did't handle situation when they are not. 
 - canary leak debug build
+- perrmissions, check at start and requested 
 
 ## Build instructions 
 

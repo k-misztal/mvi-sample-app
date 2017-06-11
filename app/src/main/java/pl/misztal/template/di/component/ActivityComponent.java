@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 
 import dagger.Component;
 import pl.misztal.template.di.scope.ActivitySingleton;
+import pl.misztal.template.location.LocationProvider;
 import pl.misztal.template.model.DataManager;
 
 /**
@@ -20,4 +21,6 @@ public interface ActivityComponent {
     Context context();
 
     LayoutInflater layoutInflater();
+
+    LocationProvider locationProvider();
 }

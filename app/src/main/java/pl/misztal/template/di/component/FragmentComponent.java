@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 
 import dagger.Component;
 import pl.misztal.template.di.scope.FragmentSingleton;
+import pl.misztal.template.location.LocationProvider;
 import pl.misztal.template.model.DataManager;
 import pl.misztal.template.ui.nearby.NearbyFragment;
 import pl.misztal.template.ui.nearby.NearbyPresenter;
@@ -25,6 +26,8 @@ public interface FragmentComponent {
     LayoutInflater layoutInflater();
 
     NearbyPresenter nearbyPresenter();
+
+    LocationProvider locationProvider();
 
     void inject(NearbyFragment nearbyFragment);
 }
