@@ -14,6 +14,7 @@ import io.reactivex.Observable;
 import pl.misztal.template.R;
 import pl.misztal.template.di.component.FragmentComponent;
 import pl.misztal.template.ui.base.BaseFragment;
+import pl.misztal.template.ui.nearby.adapter.NearbyAdapter;
 import timber.log.Timber;
 
 /**
