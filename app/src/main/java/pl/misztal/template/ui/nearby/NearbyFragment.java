@@ -3,14 +3,19 @@ package pl.misztal.template.ui.nearby;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import butterknife.BindInt;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import pl.misztal.template.R;
 import pl.misztal.template.di.component.FragmentComponent;
 import pl.misztal.template.ui.base.BaseFragment;
@@ -25,8 +30,14 @@ import timber.log.Timber;
 
 public class NearbyFragment extends BaseFragment<NearbyView, NearbyPresenter> implements NearbyView {
 
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+
     @Inject
     NearbyAdapter nearbyAdapter;
+
+    @BindInt(R.integer.span_count)
+    int spanCount;
 
     public static NearbyFragment newInstance() {
         NearbyFragment nearbyFragment = new NearbyFragment();
@@ -49,6 +60,17 @@ public class NearbyFragment extends BaseFragment<NearbyView, NearbyPresenter> im
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), spanCount);
+        // TODO: 11.06.2017 spacing
+
+        recyclerView.setAdapter(nearbyAdapter);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new LandingAnimator());
+    }
+
+    @Override
     protected void inject(@NonNull FragmentComponent component) {
         component.inject(this);
     }
@@ -60,12 +82,14 @@ public class NearbyFragment extends BaseFragment<NearbyView, NearbyPresenter> im
 
     @Override
     public Observable<Boolean> loadNextPageIntent() {
-        return null;
+        return nearbyAdapter.getLoadNewPageObservable();
     }
 
     @Override
     public void render(NearbyViewState viewState) {
-
+        Timber.d("Rendering state:\n%s", viewState.toString());
+        // TODO: 11.06.2017 proper impl!
+        nearbyAdapter.setItems(viewState.getData());
     }
 
     @NonNull

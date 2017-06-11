@@ -63,6 +63,16 @@ public final class NearbyViewState implements ViewState {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "NearbyViewState{" +
+                "waitingForLocation=" + waitingForLocation +
+                ", loadingFirstPage=" + loadingFirstPage +
+                ", firstPageError=" + firstPageError +
+                ", data=" + data +
+                '}';
+    }
+
     public static final class Builder {
         private boolean waitingForLocation;
         private boolean loadingFirstPage;
