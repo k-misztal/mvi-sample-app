@@ -50,6 +50,8 @@ class VenueViewHolder extends RecyclerView.ViewHolder {
         if (image != null) {
             // TODO: 11.06.2017 optimize size of image
             Picasso.with(itemView.getContext()).load(image.getUrl()).into(imageView);
+        } else {
+            Picasso.with(itemView.getContext()).load(R.drawable.ic_blured).into(imageView);
         }
     }
 
