@@ -29,9 +29,9 @@ android {
 
             productionConfig {
                 storeFile file("release.jks")
-                storePassword "pass"
+                storePassword "password"
                 keyAlias "alias"
-                keyPassword "pass"
+                keyPassword "password"
             }
         }
 
@@ -44,8 +44,8 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false //production app, set to true
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.productionConfig
         }
