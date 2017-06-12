@@ -71,7 +71,8 @@ public final class NearbyViewState implements ViewState {
                 "waitingForLocation=" + waitingForLocation +
                 ", loadingFirstPage=" + loadingFirstPage +
                 ", firstPageError=" + firstPageError +
-                ", data=" + data +
+                ", locationError=" + locationError +
+                ", dataSize=" + data.size() +
                 '}';
     }
 

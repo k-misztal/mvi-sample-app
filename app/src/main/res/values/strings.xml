@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Bonfire sample</string>
+    <string name="more_items">There are %d items more</string>
+    <string name="download">Click here to download</string>
+
+    <string name="try_again">Try again</string>
 </resources>
