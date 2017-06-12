@@ -9,7 +9,7 @@ android {
     buildToolsVersion "25.0.0"
 
     defaultConfig {
-        applicationId "pl.misztal.template" //todo change package name!
+        applicationId "pl.misztal.bonfire"
         minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
@@ -19,7 +19,7 @@ android {
         vectorDrawables.useSupportLibrary = true
 
         signingConfigs {
-            //todo password external file !
+            //produciton app does not have passwords here!
             debugConfig {
                 storeFile file("debug.jks")
                 storePassword "android"
