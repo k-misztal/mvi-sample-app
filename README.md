@@ -10,6 +10,8 @@ Prerequisites;
  
 As well there is pagination for loading recommended places.
 
+Application can rotate, and state is not lost while rotating (and requests are not cancelled).  
+
 ## Build instructions 
 Only run `./gradlew assembleRelease` in main dir of project. You will find apk file in `app/build/outputs/apk`.
 
