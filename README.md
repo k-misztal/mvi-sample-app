@@ -14,9 +14,6 @@ As well there is pagination for loading recommended places. Note as well that so
 ## Build instructions 
 Only run `./gradlew assembleRelease` in main dir of project. You will find apk file in `app/build/outputs/apk`.
 
-### Signing
-
- 
 ### Running tests
 Sorry, I did't have time for tests. I wanted to attach some, and generate code report with `Jacoco`, but in the end I didn't . 
 

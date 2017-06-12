@@ -8,4 +8,5 @@
     <string name="no_internet">No internet connection</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="location_error">Cannot obtain your location…</string>
+    <string name="no_places">Could not find any recommendations for you :(</string>
 </resources>

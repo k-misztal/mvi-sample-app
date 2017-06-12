@@ -114,6 +114,12 @@ public class NearbyFragment extends BaseFragment<NearbyView, NearbyPresenter> im
             errorMessage.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
             nearbyAdapter.setItems(viewState.getData());
+
+            if (viewState.getData().isEmpty()) {
+                errorMessage.setVisibility(View.VISIBLE);
+                errorMessage.setText(R.string.no_places);
+            }
+
         }
     }
 
