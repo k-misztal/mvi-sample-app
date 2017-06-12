@@ -6,7 +6,7 @@ package pl.misztal.bonfire.location;
  * @author Krzysztof Misztal
  */
 
-class LocationScanningException extends Exception {
+public class LocationScanningException extends Exception {
     LocationScanningException(String message) {
         super(message);
     }
