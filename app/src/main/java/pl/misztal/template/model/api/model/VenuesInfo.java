@@ -3,7 +3,6 @@ package pl.misztal.template.model.api.model;
 import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,10 +17,10 @@ public class VenuesInfo {
     private final float suggestedRadius;
     private final String headerLocation;
     private final int totalResults;
-    private final List<Group<Venue>> groups;
+    private final List<Group<VenueWrapper>> groups;
 
     public VenuesInfo(float suggestedRadius, String headerLocation, int totalResults,
-                      List<Group<Venue>> groups) {
+                      List<Group<VenueWrapper>> groups) {
 
         this.suggestedRadius = suggestedRadius;
         this.headerLocation = headerLocation;
@@ -41,7 +40,7 @@ public class VenuesInfo {
         return totalResults;
     }
 
-    public List<Group<Venue>> getGroups() {
+    public List<Group<VenueWrapper>> getGroups() {
         return groups;
     }
 
@@ -55,8 +54,10 @@ public class VenuesInfo {
         }
 
         List<Venue> venues = new ArrayList<>();
-        for (Group<Venue> group : groups) {
-            venues.addAll(group.getItems());
+        for (Group<VenueWrapper> group : groups) {
+            for (VenueWrapper venueWrapper : group.getItems()) {
+                venues.add(venueWrapper.getVenue());
+            }
         }
 
         return venues;

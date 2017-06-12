@@ -7,19 +7,21 @@ import pl.misztal.template.model.FeedItem;
 import pl.misztal.template.ui.base.ViewState;
 
 public final class NearbyViewState implements ViewState {
-    private final boolean waitingForLocation; //can be true initially when location is unknown or not accurate enough
 
+    private final boolean waitingForLocation; //can be true initially when location is unknown or not accurate enough
     private final boolean loadingFirstPage; //loading first page
     private final Throwable firstPageError;
+    private final Throwable locationError;
 
     private final List<FeedItem> data; //data to be displayed
 
     private NearbyViewState(boolean waitingForLocation, boolean loadingFirstPage,
-                            Throwable firstPageError, List<FeedItem> data) {
+                            Throwable firstPageError, Throwable locationError, List<FeedItem> data) {
 
         this.waitingForLocation = waitingForLocation;
         this.loadingFirstPage = loadingFirstPage;
         this.firstPageError = firstPageError;
+        this.locationError = locationError;
         this.data = data;
     }
 
@@ -73,10 +75,15 @@ public final class NearbyViewState implements ViewState {
                 '}';
     }
 
+    public Builder builder() {
+        return new Builder(this);
+    }
+
     public static final class Builder {
         private boolean waitingForLocation;
         private boolean loadingFirstPage;
         private Throwable firstPageError;
+        private Throwable locationError;
         private List<FeedItem> data;
 
         public Builder() {
@@ -88,6 +95,7 @@ public final class NearbyViewState implements ViewState {
             this.loadingFirstPage = copy.loadingFirstPage;
             this.firstPageError = copy.firstPageError;
             this.data = copy.data;
+            this.locationError = copy.locationError;
         }
 
         public Builder withWaitingForLocation(boolean val) {
@@ -114,8 +122,13 @@ public final class NearbyViewState implements ViewState {
             return this;
         }
 
+        public Builder withLocationError(Throwable locationError) {
+            this.locationError = locationError;
+            return this;
+        }
+
         public NearbyViewState build() {
-            return new NearbyViewState(waitingForLocation, loadingFirstPage, firstPageError, data);
+            return new NearbyViewState(waitingForLocation, loadingFirstPage, firstPageError, locationError, data);
         }
     }
 }

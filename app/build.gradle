@@ -59,6 +59,10 @@ android {
     jacocoAndroidUnitTestReport {
         excludes += ['**/*Factory.class']
     }
+
+    packagingOptions {
+        exclude 'META-INF/rxjava.properties'
+    }
 }
 
 dependencies {

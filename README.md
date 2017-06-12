@@ -19,7 +19,11 @@ What's that, functionalities
 
 ## Architecture wireframe
 
+Sorry for no pagination :(
+
 [MVI blog series](http://hannesdorfmann.com/android/mosby3-mvi-1)
 architecture with state reducer, android perrmissions
+
+overengineering but solves problem of state (try to rotate, requests are not canceled when rotating device)
 
 client API credentials -> `app/build.gradle`

@@ -24,13 +24,13 @@ import pl.misztal.template.model.api.model.Venue;
 class VenueViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.checkins)
-    private TextView checkins;
+    TextView checkins;
 
     @BindView(R.id.name)
-    private TextView name;
+    TextView name;
 
     @BindView(R.id.image)
-    private ImageView imageView;
+    ImageView imageView;
 
     static VenueViewHolder inflate(LayoutInflater inflater, ViewGroup parent) {
         View view = inflater.inflate(R.layout.card_item_venue, parent, false);

@@ -5,8 +5,10 @@ import com.google.gson.GsonBuilder;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import pl.misztal.template.BuildConfig;
 import pl.misztal.template.model.api.FoursquareApi;
 import retrofit2.Retrofit;
@@ -40,6 +42,23 @@ public class NetworkModule {
                 e.printStackTrace();
             }
         }
+
+        builder.addInterceptor(chain -> {
+            Request original = chain.request();
+            HttpUrl originalHttpUrl = original.url();
+
+            HttpUrl url = originalHttpUrl.newBuilder()
+                    .addQueryParameter("client_id", BuildConfig.CLIENT_ID)
+                    .addQueryParameter("client_secret", BuildConfig.SECRET)
+                    .addQueryParameter("v", BuildConfig.VERSION)
+                    .build();
+
+            Request.Builder requestBuilder = original.newBuilder()
+                    .url(url);
+
+            Request request = requestBuilder.build();
+            return chain.proceed(request);
+        });
 
         return builder.build();
     }

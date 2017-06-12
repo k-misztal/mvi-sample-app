@@ -1,5 +1,7 @@
 package pl.misztal.template.model.api.model.request;
 
+import android.location.Location;
+
 import java.util.Locale;
 
 /**
@@ -15,6 +17,10 @@ public final class LatLng {
     public LatLng(double lat, double lng) {
         this.lat = lat;
         this.lng = lng;
+    }
+
+    public LatLng(Location location) {
+        this(location.getLatitude(), location.getLongitude());
     }
 
     public double getLat() {
