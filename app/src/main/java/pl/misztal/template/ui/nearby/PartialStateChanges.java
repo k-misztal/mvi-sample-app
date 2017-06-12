@@ -1,8 +1,6 @@
 package pl.misztal.template.ui.nearby;
 
-import java.util.List;
-
-import pl.misztal.template.model.FeedItem;
+import pl.misztal.template.model.api.model.VenuesInfo;
 
 /**
  * Created by kmisztal on 12.06.2017.
@@ -82,13 +80,13 @@ public interface PartialStateChanges {
      * Indicates that the first page data has been loaded successfully
      */
     final class FirstPageLoaded implements PartialStateChanges {
-        private final List<FeedItem> data;
+        private final VenuesInfo data;
 
-        public FirstPageLoaded(List<FeedItem> data) {
-            this.data = data;
+        public FirstPageLoaded(VenuesInfo venuesInfo) {
+            this.data = venuesInfo;
         }
 
-        public List<FeedItem> getData() {
+        public VenuesInfo getData() {
             return data;
         }
     }
@@ -97,13 +95,13 @@ public interface PartialStateChanges {
      * Next Page has been loaded successfully
      */
     final class NextPageLoaded implements PartialStateChanges {
-        private final List<FeedItem> data;
+        private final VenuesInfo data;
 
-        public NextPageLoaded(List<FeedItem> data) {
+        public NextPageLoaded(VenuesInfo data) {
             this.data = data;
         }
 
-        public List<FeedItem> getData() {
+        public VenuesInfo getData() {
             return data;
         }
     }

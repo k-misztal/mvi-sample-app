@@ -13,7 +13,9 @@ import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
+import pl.misztal.template.ExceptionHandler;
 import pl.misztal.template.di.scope.FragmentSingleton;
+import pl.misztal.template.model.AdditionalItemsLoadable;
 import pl.misztal.template.model.FeedItem;
 import pl.misztal.template.model.api.model.Venue;
 
@@ -30,13 +32,15 @@ public class NearbyAdapter extends RecyclerView.Adapter {
     private static final int TYPE_MORE_ITEMS = 1;
 
     private final LayoutInflater inflater;
+    private final ExceptionHandler exceptionHandler;
     private List<FeedItem> items;
 
-    private PublishSubject<Boolean> subject = PublishSubject.create();
+    private PublishSubject<Integer> subject = PublishSubject.create();
 
     @Inject
-    public NearbyAdapter(LayoutInflater inflater) {
+    public NearbyAdapter(LayoutInflater inflater, ExceptionHandler exceptionHandler) {
         this.inflater = inflater;
+        this.exceptionHandler = exceptionHandler;
         items = new ArrayList<>();
     }
 
@@ -46,6 +50,7 @@ public class NearbyAdapter extends RecyclerView.Adapter {
             case TYPE_VENUE:
                 return VenueViewHolder.inflate(inflater, parent);
             case TYPE_MORE_ITEMS:
+                return MoreItemsViewHolder.inflate(inflater, parent, ignore -> subject.onNext(getItemCount()));
             default:
                 throw new IllegalStateException("Unknown item type: " + viewType);
         }
@@ -56,6 +61,9 @@ public class NearbyAdapter extends RecyclerView.Adapter {
         if (viewHolder instanceof VenueViewHolder) {
             Venue venue = (Venue) items.get(position);
             ((VenueViewHolder) viewHolder).bind(venue);
+        } else if (viewHolder instanceof MoreItemsViewHolder) {
+            AdditionalItemsLoadable itemsLoadable = (AdditionalItemsLoadable) items.get(position);
+            ((MoreItemsViewHolder) viewHolder).bind(itemsLoadable, exceptionHandler);
         }
     }
 
@@ -64,6 +72,8 @@ public class NearbyAdapter extends RecyclerView.Adapter {
         FeedItem item = items.get(position);
         if (item instanceof Venue) {
             return TYPE_VENUE;
+        } else if (item instanceof AdditionalItemsLoadable) {
+            return TYPE_MORE_ITEMS;
         } else {
             throw new IllegalStateException("Unknown item type.");
         }
@@ -75,7 +85,7 @@ public class NearbyAdapter extends RecyclerView.Adapter {
     }
 
     @NonNull
-    public Observable<Boolean> getLoadNewPageObservable() {
+    public Observable<Integer> getLoadNewPageObservable() {
         return subject;
     }
 
@@ -120,7 +130,7 @@ public class NearbyAdapter extends RecyclerView.Adapter {
 
                     return oldItem.equals(newItem);
                 }
-            }, true).dispatchUpdatesTo(this);
+            }, false).dispatchUpdatesTo(this);
         }
     }
 }

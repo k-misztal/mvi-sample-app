@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import pl.misztal.template.ExceptionHandler;
 import pl.misztal.template.R;
 import pl.misztal.template.model.AdditionalItemsLoadable;
@@ -23,6 +24,8 @@ import timber.log.Timber;
 
 public class MoreItemsViewHolder extends RecyclerView.ViewHolder {
 
+    private final View.OnClickListener onClickListener;
+
     @BindView(R.id.info)
     ViewGroup info;
 
@@ -35,14 +38,17 @@ public class MoreItemsViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
 
-    static MoreItemsViewHolder inflate(LayoutInflater inflater, ViewGroup parent) {
-        View view = inflater.inflate(R.layout.card_item_venue, parent, false);
-        return new MoreItemsViewHolder(view);
+    static MoreItemsViewHolder inflate(LayoutInflater inflater, ViewGroup parent,
+                                       View.OnClickListener onClickListener) {
+
+        View view = inflater.inflate(R.layout.card_item_more_items, parent, false);
+        return new MoreItemsViewHolder(view, onClickListener);
     }
 
-    private MoreItemsViewHolder(View itemView) {
+    private MoreItemsViewHolder(View itemView, View.OnClickListener onClickListener) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+        this.onClickListener = onClickListener;
     }
 
     void bind(AdditionalItemsLoadable itemsLoadable, ExceptionHandler exceptionHandler) {
@@ -64,6 +70,12 @@ public class MoreItemsViewHolder extends RecyclerView.ViewHolder {
             }
 
         }
+    }
 
+    @OnClick(R.id.action_button)
+    void onClick(View view) {
+        if (onClickListener != null) {
+            onClickListener.onClick(view);
+        }
     }
 }

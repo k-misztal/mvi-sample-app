@@ -2,6 +2,8 @@ package pl.misztal.template;
 
 import android.content.Context;
 
+import java.net.UnknownHostException;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -15,7 +17,11 @@ public class ExceptionHandler {
     }
 
     public String getMessageError(Throwable throwable) {
-        return null;
+        if (throwable instanceof UnknownHostException) {
+            return context.getString(R.string.no_internet);
+        }
+
+        return context.getString(R.string.something_went_wrong);
     }
 
 }

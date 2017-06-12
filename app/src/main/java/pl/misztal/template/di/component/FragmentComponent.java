@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 
 import dagger.Component;
+import pl.misztal.template.ExceptionHandler;
 import pl.misztal.template.di.scope.FragmentSingleton;
 import pl.misztal.template.location.LocationProvider;
 import pl.misztal.template.model.DataManager;
@@ -28,6 +29,8 @@ public interface FragmentComponent {
     NearbyPresenter nearbyPresenter();
 
     LocationProvider locationProvider();
+
+    ExceptionHandler exceptionHandler();
 
     void inject(NearbyFragment nearbyFragment);
 }

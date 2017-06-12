@@ -61,6 +61,7 @@ public final class NearbyViewState implements ViewState {
         int result = (waitingForLocation ? 1 : 0);
         result = 31 * result + (loadingFirstPage ? 1 : 0);
         result = 31 * result + (firstPageError != null ? firstPageError.hashCode() : 0);
+        result = 31 * result + (locationError != null ? locationError.hashCode() : 0);
         result = 31 * result + (data != null ? data.hashCode() : 0);
         return result;
     }

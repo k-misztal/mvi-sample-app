@@ -1,6 +1,10 @@
 package pl.misztal.template.ui.nearby;
 
+import android.location.Location;
+
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -10,8 +14,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import pl.misztal.template.di.scope.FragmentSingleton;
 import pl.misztal.template.location.LocationProvider;
+import pl.misztal.template.model.AdditionalItemsLoadable;
 import pl.misztal.template.model.DataManager;
+import pl.misztal.template.model.FeedItem;
+import pl.misztal.template.model.api.model.VenuesInfo;
 import pl.misztal.template.model.api.model.request.LatLng;
+import pl.misztal.template.model.api.model.response.Response;
 import pl.misztal.template.ui.base.BasePresenter;
 import timber.log.Timber;
 
@@ -24,10 +32,11 @@ import timber.log.Timber;
 @FragmentSingleton
 public class NearbyPresenter extends BasePresenter<NearbyView, NearbyViewState> {
 
-    public static final float MINIMUM_ACCURACY = 500;
+    public static final int PAGE_LIMIT = 10;
 
     private final DataManager dataManager;
     private final LocationProvider locationProvider;
+    private Location location;
 
     @Inject
     public NearbyPresenter(DataManager dataManager, LocationProvider locationProvider) {
@@ -37,26 +46,40 @@ public class NearbyPresenter extends BasePresenter<NearbyView, NearbyViewState> 
 
     @Override
     protected void bindIntents() {
+        //get location and after that load first page
         Observable<PartialStateChanges> loadFirstPage = locationProvider.start()
-//                .doOnNext(location -> Timber.d("New location with precision: %f", location.getAccuracy()))
-//                .filter(location -> location.getAccuracy() < 500)
                 .firstOrError()
                 .observeOn(Schedulers.io())
-                .flatMap(location -> dataManager.api().getRecommendedVenues(new LatLng(location), location.getAccuracy()))
-                .map(venuesInfoResponse -> venuesInfoResponse.getResponse().getAllVenues())
-                .map(venues -> (PartialStateChanges) new PartialStateChanges.FirstPageLoaded(new ArrayList<>(venues)))
+                .delay(1000, TimeUnit.MILLISECONDS)
+                .flatMap(location -> {
+                    this.location = location;
+                    return dataManager.api()
+                            .getRecommendedVenues(new LatLng(location), location.getAccuracy(), PAGE_LIMIT, 0);
+                })
+                .map(Response::getResponse)
+                .map(info -> (PartialStateChanges) new PartialStateChanges.FirstPageLoaded(info))
                 .toObservable()
                 .startWith(new PartialStateChanges.FirstPageLoading())
                 .onErrorReturn(PartialStateChanges.FirstPageError::new);
 
-        // TODO: 12.06.2017 next page loading
-        Observable<PartialStateChanges> allIntentsObservable = loadFirstPage
+        //loading next page
+        Observable<PartialStateChanges> nextPage = intent(NearbyView::loadNextPageIntent)
+                .flatMap(integer -> dataManager.api()
+                        .getRecommendedVenues(new LatLng(location), location.getAccuracy(), PAGE_LIMIT, integer)
+                        .map(Response::getResponse)
+                        .map(venuesInfo -> (PartialStateChanges) new PartialStateChanges.NextPageLoaded(venuesInfo))
+                        .toObservable()
+                        .startWith(new PartialStateChanges.NextPageLoading())
+                        .onErrorReturn(PartialStateChanges.NexPageLoadingError::new)
+                        .subscribeOn(Schedulers.io()));
+
+        Observable<PartialStateChanges> allIntentsObservable = Observable.merge(loadFirstPage, nextPage)
                 .observeOn(AndroidSchedulers.mainThread());
 
         NearbyViewState initialState = new NearbyViewState.Builder().withWaitingForLocation(true).build();
 
         subscribeViewState(
-                allIntentsObservable.scan(initialState, this::reduce).distinctUntilChanged(),
+                allIntentsObservable.scan(initialState, this::reduce),
                 NearbyView::render);
     }
 
@@ -78,9 +101,15 @@ public class NearbyPresenter extends BasePresenter<NearbyView, NearbyViewState> 
         }
 
         if (stateChanges instanceof PartialStateChanges.FirstPageLoaded) {
+            VenuesInfo info = ((PartialStateChanges.FirstPageLoaded) stateChanges).getData();
+            List<FeedItem> data = new ArrayList<>(info.getAllVenues());
+            if (info.getTotalResults() > data.size()) {
+                addLoadable(data, new AdditionalItemsLoadable(info.getTotalResults() - data.size(), false, null));
+            }
+
             return previous.builder().withWaitingForLocation(false)
                     .withLoadingFirstPage(false)
-                    .withData(((PartialStateChanges.FirstPageLoaded) stateChanges).getData())
+                    .withData(data)
                     .build();
         }
 
@@ -88,6 +117,32 @@ public class NearbyPresenter extends BasePresenter<NearbyView, NearbyViewState> 
             return previous.builder().withLoadingFirstPage(false)
                     .withFirstPageError(((PartialStateChanges.FirstPageError) stateChanges).getError())
                     .build();
+        }
+
+        if (stateChanges instanceof PartialStateChanges.NextPageLoading) {
+            List<FeedItem> data = previous.getData();
+            addLoadable(data, new AdditionalItemsLoadable(0, true, null));
+            return previous.builder().withData(data).build();
+        }
+
+        if (stateChanges instanceof PartialStateChanges.NextPageLoaded) {
+            VenuesInfo info = ((PartialStateChanges.NextPageLoaded) stateChanges).getData();
+            List<FeedItem> data = previous.getData();
+            data.addAll(info.getAllVenues());
+
+            if (info.getTotalResults() > data.size()) {
+                addLoadable(data, new AdditionalItemsLoadable(info.getTotalResults() - data.size(), false, null));
+            } else {
+                addLoadable(data, null);
+            }
+            return previous.builder().withData(data).build();
+        }
+
+        if (stateChanges instanceof PartialStateChanges.NexPageLoadingError) {
+            Throwable error = ((PartialStateChanges.NexPageLoadingError) stateChanges).getError();
+            List<FeedItem> data = previous.getData();
+            addLoadable(data, new AdditionalItemsLoadable(0, false, error));
+            return previous.builder().withData(data).build();
         }
 
         throw new IllegalStateException("PartialStateChanges not supported: " + stateChanges.toString());
@@ -98,5 +153,20 @@ public class NearbyPresenter extends BasePresenter<NearbyView, NearbyViewState> 
         Timber.d("Cleaning up NearbyPresenter.");
         super.unbindIntents();
         locationProvider.stop();
+    }
+
+    //adds loadable at the end, replacing old one
+    private static void addLoadable(List<FeedItem> list, AdditionalItemsLoadable loadable) {
+        Iterator<FeedItem> iterator = list.iterator();
+        while (iterator.hasNext()) {
+            FeedItem item = iterator.next();
+            if (item instanceof AdditionalItemsLoadable) {
+                iterator.remove();
+            }
+        }
+
+        if (loadable != null) {
+            list.add(loadable);
+        }
     }
 }

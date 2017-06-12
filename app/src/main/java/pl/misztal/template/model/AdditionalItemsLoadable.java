@@ -46,8 +46,8 @@ public final class AdditionalItemsLoadable implements FeedItem {
 
         if (moreItemsAvailableCount != that.moreItemsAvailableCount) return false;
         if (loading != that.loading) return false;
-        return loadingError != null ? loadingError.getClass().equals(that.loadingError.getClass())
-                : that.loadingError == null;
+        return loadingError != null ? loadingError.equals(that.loadingError) : that.loadingError == null;
+
     }
 
     @Override

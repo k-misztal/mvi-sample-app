@@ -81,7 +81,7 @@ public class NearbyFragment extends BaseFragment<NearbyView, NearbyPresenter> im
     }
 
     @Override
-    public Observable<Boolean> loadNextPageIntent() {
+    public Observable<Integer> loadNextPageIntent() {
         return nearbyAdapter.getLoadNewPageObservable();
     }
 

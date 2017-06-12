@@ -20,11 +20,10 @@ public interface NearbyView extends BaseView {
 
     /**
      * The intent to load next page
-     * todo: detect if there is next page!
      *
-     * @return The emitted item boolean can be ignored because it is always true
+     * @return Integer that says how many items there is in the adapter
      */
-    Observable<Boolean> loadNextPageIntent();
+    Observable<Integer> loadNextPageIntent();
 
     void render(NearbyViewState viewState);
 }
