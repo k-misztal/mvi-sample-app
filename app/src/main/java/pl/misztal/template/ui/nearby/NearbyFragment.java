@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import javax.inject.Inject;
 
@@ -16,6 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.Observable;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
+import pl.misztal.template.ExceptionHandler;
 import pl.misztal.template.R;
 import pl.misztal.template.di.component.FragmentComponent;
 import pl.misztal.template.ui.base.BaseFragment;
@@ -33,8 +36,17 @@ public class NearbyFragment extends BaseFragment<NearbyView, NearbyPresenter> im
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
+
+    @BindView(R.id.error_message)
+    TextView errorMessage;
+
     @Inject
     NearbyAdapter nearbyAdapter;
+
+    @Inject
+    ExceptionHandler exceptionHandler;
 
     @BindInt(R.integer.span_count)
     int spanCount;
@@ -88,8 +100,22 @@ public class NearbyFragment extends BaseFragment<NearbyView, NearbyPresenter> im
     @Override
     public void render(NearbyViewState viewState) {
         Timber.d("Rendering state:\n%s", viewState.toString());
-        // TODO: 11.06.2017 proper impl!
-        nearbyAdapter.setItems(viewState.getData());
+        if (viewState.isLoadingFirstPage() || viewState.isLoadingFirstPage()) {
+            progressBar.setVisibility(View.VISIBLE);
+            errorMessage.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.INVISIBLE);
+        } else if (viewState.getFirstPageError() != null) {
+            String error = exceptionHandler.getMessageError(viewState.getFirstPageError());
+            progressBar.setVisibility(View.GONE);
+            errorMessage.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.INVISIBLE);
+            errorMessage.setText(error);
+        } else {
+            progressBar.setVisibility(View.GONE);
+            errorMessage.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            nearbyAdapter.setItems(viewState.getData());
+        }
     }
 
     @NonNull

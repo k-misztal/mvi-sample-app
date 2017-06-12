@@ -50,7 +50,6 @@ public class NearbyPresenter extends BasePresenter<NearbyView, NearbyViewState> 
         Observable<PartialStateChanges> loadFirstPage = locationProvider.start()
                 .firstOrError()
                 .observeOn(Schedulers.io())
-                .delay(1000, TimeUnit.MILLISECONDS)
                 .flatMap(location -> {
                     this.location = location;
                     return dataManager.api()
