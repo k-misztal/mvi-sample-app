@@ -8,8 +8,7 @@ Prerequisites;
 - canary leak is turned on in debug build
 - app will ask about location permissions on start, if revoked app will finish. 
  
-As well there is pagination for loading recommended places. Note as well that some places does not have image added 
-(for my hometown none of them), so it will use some placeholder.
+As well there is pagination for loading recommended places.
 
 ## Build instructions 
 Only run `./gradlew assembleRelease` in main dir of project. You will find apk file in `app/build/outputs/apk`.

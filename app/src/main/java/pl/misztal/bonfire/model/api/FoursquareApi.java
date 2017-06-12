@@ -10,7 +10,7 @@ import retrofit2.http.Query;
 
 public interface FoursquareApi {
 
-    @GET("venues/explore?venuesPhotos=1")
+    @GET("venues/explore?venuePhotos=1")
     Single<Response<VenuesInfo>> getRecommendedVenues(@Query("ll") LatLng latLng, @Query("llAcc") float accuracy,
                                                       @Query("limit") int limit, @Query("offset") int offset);
 }
